@@ -12,8 +12,10 @@
   "dependencies": {
     "@mantine/core": "^8.0.1",
     "@mantine/dates": "^8.0.1",
+    "@mantine/form": "^8.0.1",
     "@mantine/hooks": "^8.0.1",
     "@mantine/notifications": "^8.0.1",
+    "@supabase/supabase-js": "^2.39.7",
     "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
