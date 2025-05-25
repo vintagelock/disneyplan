@@ -29,6 +29,7 @@ import {
   Star,
   Home,
   Settings,
+  CalendarDays,
 } from 'lucide-react';
 
 // Types
@@ -42,6 +43,7 @@ import Dining from './components/Dining';
 import Hotels from './components/Hotels';
 import LightningLane from './components/LightningLane';
 import PartyMembers from './components/PartyMembers';
+import DailyCalendar from './components/DailyCalendar';
 
 // Sample data with TypeScript
 const parks: Park[] = [
@@ -85,6 +87,7 @@ const parks: Park[] = [
 
 const navigationItems: NavigationItem[] = [
   { id: 'overview', label: 'Trip Overview', icon: Home, color: 'blue' },
+  { id: 'calendar', label: 'Daily Calendar', icon: CalendarDays, color: 'violet' },
   { id: 'party', label: 'Party Members', icon: Users, color: 'green' },
   { id: 'parks', label: 'Parks & Attractions', icon: MapPin, color: 'green' },
   { id: 'dining', label: 'Dining', icon: Utensils, color: 'orange' },
@@ -349,6 +352,8 @@ const DisneyTripPlanner: React.FC = () => {
     switch (trip.currentStep) {
       case 'overview':
         return <TripOverview trip={trip} partyMembers={partyMembers} />;
+      case 'calendar':
+        return <DailyCalendar trip={trip} partyMembers={partyMembers} />;
       case 'party':
         return <PartyMembers partyMembers={partyMembers} onUpdatePartyMembers={handlePartyMembersUpdate} />;
       case 'parks':

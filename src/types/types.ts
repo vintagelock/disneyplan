@@ -1,5 +1,6 @@
 export type NavigationStep =
   | 'overview'
+  | 'calendar'
   | 'party'
   | 'parks'
   | 'dining'
