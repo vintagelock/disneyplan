@@ -1,24 +1,63 @@
-# Logs
+# Ignore node_modules everywhere
+**/node_modules/
+
+# Ignore logs
 logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Ignore OS generated files
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
+
+# Ignore environment variable files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore build output
+dist/
+build/
+tmp/
+temp/
+
+# Ignore coverage reports
+coverage/
+
+# Ignore IDE folders
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Ignore package manager stores
+.pnpm-store/
+.npm/
+.yarn/
+
+# Optional: Ignore typescript build artifacts
+*.tsbuildinfo
+
+# Optional: Ignore next.js build
+.next/
+
+# Optional: Ignore remix build
+.build/
+
+# Optional: Ignore serverless framework build
+.serverless/
+
+# Optional: Ignore storybook static build
+storybook-static/
+
+# Optional: Ignore vercel output
+.vercel/
+
+# Optional: Ignore local docker files
+docker-compose.override.yml
+
