@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
-import { Container, Text, Button, Paper } from '@mantine/core';
 
 interface Props {
   children: ReactNode;
@@ -28,25 +27,44 @@ class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <Container
+        <div
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             height: '100vh',
             padding: '1rem',
+            fontFamily: 'system-ui, sans-serif',
           }}
         >
-          <Paper shadow="xs" p="md" style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-            <Text size="xl" fw={700} mb="md">
-              Something went wrong
-            </Text>
-            <Text c="dimmed" mb="xl">
-              {this.state.error?.message}
-            </Text>
-            <Button onClick={() => window.location.reload()}>Reload Page</Button>
-          </Paper>
-        </Container>
+          <div
+            style={{
+              maxWidth: '400px',
+              width: '100%',
+              textAlign: 'center',
+              padding: '2rem',
+              border: '1px solid #ccc',
+              borderRadius: '8px',
+              backgroundColor: '#f9f9f9',
+            }}
+          >
+            <h2 style={{ marginBottom: '1rem', color: '#333' }}>Something went wrong</h2>
+            <p style={{ marginBottom: '2rem', color: '#666' }}>{this.state.error?.message}</p>
+            <button
+              onClick={() => window.location.reload()}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: '#007bff',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              Reload Page
+            </button>
+          </div>
+        </div>
       );
     }
 

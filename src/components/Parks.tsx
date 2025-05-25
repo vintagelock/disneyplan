@@ -11,11 +11,7 @@ import {
   Stack,
   Tabs,
   Paper,
-  SimpleGrid,
-  ThemeIcon,
-  Progress,
   Modal,
-  ScrollArea,
   Divider,
 } from '@mantine/core';
 
@@ -303,7 +299,7 @@ const Parks: React.FC<ParksProps> = ({ selectedDate }) => {
                         Shows & Entertainment
                       </Title>
                       <Stack gap="md">
-                        {park.shows.map((show) => (
+                        {park.shows_extra.map((show) => (
                           <Card key={show.id} withBorder p="md">
                             <Group mb="xs">
                               <Music size="1rem" />

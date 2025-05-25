@@ -12,14 +12,14 @@ import {
   Select,
   Grid,
   Card,
-  Badge,
   ActionIcon,
   Stepper,
-  Center,
   Divider,
 } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
+import { DatePickerInput } from '@mantine/dates';
+
 import { Plus, Trash2, Calendar, Users, MapPin, CheckCircle } from 'lucide-react';
+
 import type { Trip, PartyMember } from '../types/types';
 
 interface OnboardingProps {
@@ -148,7 +148,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
 
       <Grid>
         <Grid.Col span={6}>
-          <DateInput
+          <DatePickerInput
             label="Start Date"
             placeholder="Select start date"
             value={data.startDate}
@@ -158,7 +158,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
           />
         </Grid.Col>
         <Grid.Col span={6}>
-          <DateInput
+          <DatePickerInput
             label="End Date"
             placeholder="Select end date"
             value={data.endDate}

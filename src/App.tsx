@@ -377,7 +377,14 @@ const DisneyTripPlanner: React.FC = () => {
 
   // Show onboarding if not completed
   if (!isOnboardingComplete) {
+    {
+      console.log('Show onboarding as not complete');
+    }
     return <Onboarding onComplete={handleOnboardingComplete} />;
+  }
+
+  {
+    console.log('Show main appshell');
   }
 
   // Show main app after onboarding

@@ -1,14 +1,15 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createTheme, DEFAULT_THEME, MantineProvider, mergeMantineTheme } from '@mantine/core';
+import { DatesProvider, DATES_PROVIDER_DEFAULT_SETTINGS } from '@mantine/dates';
 import { Notifications } from '@mantine/notifications';
 
 import './index.css';
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 
 import DisneyTripPlanner from './App.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
-import Onboarding from './components/Onboarding.tsx';
 
 const myTheme = createTheme({
   colors: {
@@ -65,8 +66,10 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
       <MantineProvider theme={mergedTheme} defaultColorScheme="dark">
-        <Notifications />
-        <DisneyTripPlanner />
+        <DatesProvider settings={DATES_PROVIDER_DEFAULT_SETTINGS}>
+          <Notifications />
+          <DisneyTripPlanner />
+        </DatesProvider>
       </MantineProvider>
     </ErrorBoundary>
   </StrictMode>,
