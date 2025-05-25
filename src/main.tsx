@@ -8,6 +8,7 @@ import '@mantine/core/styles.css';
 
 import DisneyTripPlanner from './App.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
+import Onboarding from './components/Onboarding.tsx';
 
 const myTheme = createTheme({
   colors: {
@@ -37,9 +38,22 @@ const myTheme = createTheme({
       '#3a5890',
       '#2c4b80',
     ],
+
+    purple: [
+      '#f6eeff',
+      '#e7d9f7',
+      '#cab1ea',
+      '#ad86dd',
+      '#9462d2',
+      '#854bcb',
+      '#7d3fc9',
+      '#6b31b2',
+      '#5f2ba0',
+      '#52238d',
+    ],
   },
 
-  primaryColor: 'blue',
+  primaryColor: 'purple',
   primaryShade: { dark: 9, light: 1 },
   defaultRadius: 'sm',
   fontFamily: 'Inter, system-ui, sans-serif',
