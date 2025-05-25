@@ -15,7 +15,7 @@ import {
   LoadingOverlay,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconMail, IconLock, IconAlertCircle } from '@tabler/icons-react';
+import { MailIcon, LockIcon, AlertCircleIcon } from 'lucide-react';
 import { useAuth } from '../lib/hooks/useAuth';
 
 interface AuthFormData {
@@ -92,7 +92,7 @@ const AuthComponent: React.FC = () => {
           </div>
 
           {error && (
-            <Alert icon={<IconAlertCircle size="1rem" />} color="red">
+            <Alert icon={<AlertCircleIcon size="1rem" />} color="red">
               {error}
             </Alert>
           )}
@@ -113,7 +113,7 @@ const AuthComponent: React.FC = () => {
               <TextInput
                 label="Email"
                 placeholder="your@email.com"
-                leftSection={<IconMail size="1rem" />}
+                leftSection={<MailIcon size="1rem" />}
                 {...form.getInputProps('email')}
                 required
               />
@@ -121,7 +121,7 @@ const AuthComponent: React.FC = () => {
               <PasswordInput
                 label="Password"
                 placeholder="Your password"
-                leftSection={<IconLock size="1rem" />}
+                leftSection={<LockIcon size="1rem" />}
                 {...form.getInputProps('password')}
                 required
               />
@@ -130,7 +130,7 @@ const AuthComponent: React.FC = () => {
                 <PasswordInput
                   label="Confirm Password"
                   placeholder="Confirm your password"
-                  leftSection={<IconLock size="1rem" />}
+                  leftSection={<LockIcon size="1rem" />}
                   {...form.getInputProps('confirmPassword')}
                   required
                 />

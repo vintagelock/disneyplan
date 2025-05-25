@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AppShell,
   Text,
@@ -15,6 +15,8 @@ import {
   Container,
   Paper,
   Center,
+  Alert,
+  LoadingOverlay,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
@@ -30,6 +32,8 @@ import {
   Home,
   Settings,
   CalendarDays,
+  AlertCircleIcon,
+  LogInIcon,
 } from 'lucide-react';
 
 // Types
@@ -44,6 +48,13 @@ import Hotels from './components/Hotels';
 import LightningLane from './components/LightningLane';
 import PartyMembers from './components/PartyMembers';
 import DailyCalendar from './components/DailyCalendar';
+import AuthComponent from './components/AuthComponent';
+
+// Supabase imports
+import { useAuth } from './lib/hooks/useAuth';
+import { useTrip } from './lib/hooks/useTrip';
+import { tripsApi } from './lib/api/trips';
+import { partyMembersApi } from './lib/api/PartyMembers';
 
 // Sample data with TypeScript
 const parks: Park[] = [
@@ -473,3 +484,274 @@ const DisneyTripPlanner: React.FC = () => {
 };
 
 export default DisneyTripPlanner;
+
+export const SupabaseDisneyTripPlanner: React.FC = () => {
+  const { user, loading: authLoading, signOut } = useAuth();
+  const [currentTripId, setCurrentTripId] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState<NavigationStep>('overview');
+  const [opened, { toggle, close }] = useDisclosure(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const { trip, loading: tripLoading, error: tripError } = useTrip(currentTripId || '');
+
+  // Load user's most recent trip on mount
+  useEffect(() => {
+    async function loadUserTrip() {
+      if (user && !currentTripId) {
+        try {
+          const trips = await tripsApi.getTrips();
+          if (trips && trips.length > 0) {
+            setCurrentTripId(trips[0].id);
+            setCurrentStep(trips[0].current_step as NavigationStep);
+          }
+        } catch (err) {
+          console.error('Error loading trips:', err);
+          setError('Failed to load trips');
+        }
+      }
+    }
+
+    loadUserTrip();
+  }, [user, currentTripId]);
+
+  const handleNavigationChange = async (step: NavigationStep) => {
+    if (currentTripId) {
+      try {
+        await tripsApi.updateTrip(currentTripId, { current_step: step });
+        setCurrentStep(step);
+        close(); // Close mobile menu
+      } catch (err) {
+        console.error('Error updating trip step:', err);
+      }
+    }
+  };
+
+  const handleTripCreate = async (tripData: any, partyMembersData: any[]) => {
+    if (!user) return;
+
+    try {
+      // Create trip
+      const newTrip = await tripsApi.createTrip({
+        user_id: user.id,
+        name: tripData.name,
+        start_date: tripData.startDate.toISOString().split('T')[0],
+        end_date: tripData.endDate.toISOString().split('T')[0],
+        party_size: partyMembersData.length,
+        current_step: 'overview',
+      });
+
+      // Create party members
+      const partyMemberPromises = partyMembersData.map((member, index) =>
+        partyMembersApi.addPartyMember({
+          trip_id: newTrip.id,
+          name: member.name,
+          age: member.age,
+          ticket_type: member.ticketType,
+          dietary_restrictions: member.dietaryRestrictions,
+          disabilities: member.disabilities,
+          sort_order: index,
+        }),
+      );
+
+      await Promise.all(partyMemberPromises);
+
+      setCurrentTripId(newTrip.id);
+      setCurrentStep('overview');
+    } catch (err) {
+      console.error('Error creating trip:', err);
+      setError('Failed to create trip');
+    }
+  };
+
+  const renderContent = (): React.ReactNode => {
+    if (!trip && !tripLoading) {
+      return <Onboarding onComplete={handleTripCreate} />;
+    }
+
+    if (tripLoading) {
+      return <LoadingOverlay visible />;
+    }
+
+    if (tripError) {
+      return (
+        <Container size="md">
+          <Alert icon={<AlertCircleIcon size="1rem" />} title="Error" color="red">
+            Failed to load trip data. Please try refreshing the page.
+          </Alert>
+        </Container>
+      );
+    }
+
+    switch (currentStep) {
+      case 'overview':
+        return <TripOverview trip={trip} />;
+      case 'calendar':
+        return <DailyCalendar trip={trip} partyMembers={trip?.party_members || []} />;
+      case 'party':
+        return (
+          <PartyMembers
+            partyMembers={trip?.party_members || []}
+            onUpdatePartyMembers={async (updatedMembers) => {
+              // Update party members in database
+              // This would need more detailed implementation
+              console.log('Update party members:', updatedMembers);
+            }}
+          />
+        );
+      case 'parks':
+        return <Parks selectedDate={trip ? new Date(trip.start_date) : new Date()} />;
+      case 'dining':
+        return <Dining partySize={trip?.party_size || 4} />;
+      case 'hotels':
+        return (
+          <Hotels
+            partySize={trip?.party_size || 4}
+            tripDates={
+              trip
+                ? {
+                    start: new Date(trip.start_date),
+                    end: new Date(trip.end_date),
+                  }
+                : undefined
+            }
+          />
+        );
+      case 'lightning':
+        return <LightningLane partySize={trip?.party_size || 4} />;
+      case 'summary':
+        return (
+          <PlaceholderSection
+            title="Trip Summary"
+            description="Review all your reservations, plans, and important trip details"
+          />
+        );
+      case 'settings':
+        return (
+          <PlaceholderSection title="Trip Settings" description="Manage your trip preferences and party details" />
+        );
+      default:
+        return <TripOverview trip={trip} />;
+    }
+  };
+
+  // Show loading screen while checking auth
+  if (authLoading) {
+    return <LoadingOverlay visible />;
+  }
+
+  // Show auth component if not logged in
+  if (!user) {
+    return <AuthComponent />;
+  }
+
+  // Show error if there's an app-level error
+  if (error) {
+    return (
+      <Container size="md" style={{ paddingTop: '2rem' }}>
+        <Alert icon={<AlertCircleIcon size="1rem" />} title="Error" color="red">
+          {error}
+        </Alert>
+      </Container>
+    );
+  }
+
+  // Show onboarding if no trip exists
+  if (!trip && !tripLoading) {
+    return <Onboarding onComplete={handleTripCreate} />;
+  }
+
+  // Show main app after authentication and trip loading
+  return (
+    <AppShell
+      header={{ height: 70 }}
+      navbar={{
+        width: 300,
+        breakpoint: 'sm',
+        collapsed: { mobile: !opened },
+      }}
+      padding="md"
+    >
+      <AppShell.Header>
+        <Group h="100%" px="md" justify="space-between">
+          <Group>
+            <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+            <div>
+              <Text size="xl" fw={600}>
+                {trip?.name || 'Lewis Family Disney Trip'}
+              </Text>
+              <Group gap="lg" visibleFrom="xs">
+                <Group gap="xs">
+                  <Calendar size="1rem" />
+                  <Text size="sm" c="dimmed">
+                    {trip
+                      ? `${new Date(trip.start_date).toLocaleDateString()} - ${new Date(
+                          trip.end_date,
+                        ).toLocaleDateString()}`
+                      : ''}
+                  </Text>
+                </Group>
+                <Group gap="xs">
+                  <Users size="1rem" />
+                  <Text size="sm" c="dimmed">
+                    {trip?.party_size || 0} guests
+                  </Text>
+                </Group>
+              </Group>
+            </div>
+          </Group>
+
+          <Group gap="xl" visibleFrom="md">
+            <div style={{ textAlign: 'center' }}>
+              <Text size="xl" fw={700} c="blue">
+                {trip
+                  ? Math.max(
+                      0,
+                      Math.ceil((new Date(trip.start_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)),
+                    )
+                  : 0}
+              </Text>
+              <Text size="xs" c="dimmed">
+                days to go
+              </Text>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <Text size="xl" fw={700} c="green">
+                {trip
+                  ? Math.ceil(
+                      (new Date(trip.end_date).getTime() - new Date(trip.start_date).getTime()) / (1000 * 60 * 60 * 24),
+                    )
+                  : 0}
+              </Text>
+              <Text size="xs" c="dimmed">
+                days total
+              </Text>
+            </div>
+            <Button variant="subtle" leftSection={<LogInIcon size="1rem" />} onClick={signOut}>
+              Sign Out
+            </Button>
+          </Group>
+        </Group>
+      </AppShell.Header>
+
+      <AppShell.Navbar p="md">
+        <Group mb="md">
+          <Text size="lg" fw={500} c="blue">
+            Disney Planner
+          </Text>
+        </Group>
+        <Stack gap="xs">
+          {navigationItems.map((item) => (
+            <NavLink
+              key={item.id}
+              {...item}
+              active={currentStep === item.id}
+              onClick={() => handleNavigationChange(item.id)}
+            />
+          ))}
+        </Stack>
+      </AppShell.Navbar>
+
+      <AppShell.Main>{renderContent()}</AppShell.Main>
+    </AppShell>
+  );
+};

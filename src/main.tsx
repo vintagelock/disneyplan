@@ -9,6 +9,8 @@ import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 
 import DisneyTripPlanner from './App.tsx';
+import { SupabaseDisneyTripPlanner } from './App.tsx';
+
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 
 const myTheme = createTheme({
