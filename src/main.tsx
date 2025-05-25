@@ -6,14 +6,10 @@ import './index.css'
 // All packages except `@mantine/hooks` require styles imports
 import '@mantine/core/styles.css';
 
-import { MantineProvider } from '@mantine/core';
-
 import DisneyTripPlanner from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <MantineProvider>
     <DisneyTripPlanner />
-    </MantineProvider>
   </StrictMode>,
 )

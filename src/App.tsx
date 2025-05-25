@@ -35,6 +35,7 @@ import {
   Settings
 } from 'lucide-react';
 
+
 // TypeScript interfaces
 interface Trip {
   id: string;
@@ -242,9 +243,8 @@ const TripOverview: React.FC<TripOverviewProps> = ({ trip }) => {
                   padding="lg" 
                   radius="md" 
                   withBorder
-                  sx={{ cursor: 'pointer', transition: 'transform 0.2s' }}
+                  style={{ cursor: 'pointer', transition: 'transform 0.2s', ':hover': { transform: 'translateY(-2px)' }}}
                   onClick={() => {}}
-                  style={{ ':hover': { transform: 'translateY(-2px)' } }}
                 >
                   <Group justify="apart" mb="xs">
                     <Group>
@@ -366,7 +366,7 @@ const DisneyTripPlanner: React.FC = () => {
 
   return (
     <MantineProvider 
-    forceColorScheme='dark'
+      forceColorScheme='dark'
       theme={{
         primaryColor: 'blue',
         fontFamily: 'Inter, sans-serif',
