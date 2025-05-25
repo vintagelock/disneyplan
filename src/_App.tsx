@@ -15,6 +15,7 @@ import {
   Container,
   Paper,
   Center,
+  Image,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
@@ -41,9 +42,19 @@ import Parks from './components/Parks';
 import Dining from './components/Dining';
 import Hotels from './components/Hotels';
 import LightningLane from './components/LightningLane';
-import PartyMembers from './components/PartyMembers';
+
+import { WaltDisneyWorldMagicKingdom } from 'themeparks';
 
 // Sample data with TypeScript
+const sampleTrip: Trip = {
+  id: '1',
+  name: 'Lewis Family Disney Trip',
+  startDate: new Date('2025-07-16'),
+  endDate: new Date('2025-07-30'),
+  partySize: 4,
+  currentStep: 'overview',
+};
+
 const parks: Park[] = [
   {
     id: 'mk',
@@ -83,9 +94,117 @@ const parks: Park[] = [
   },
 ];
 
+const hotels: Hotel[] = [
+  {
+    id: 'gf',
+    name: 'Grand Floridian Resort & Spa',
+    tier: 'Deluxe Villa',
+    price: '$800/night',
+    transportation: 'Monorail to Magic Kingdom',
+    amenities: ['Spa', 'Fine Dining', 'Beach', 'Monorail Access'],
+  },
+  {
+    id: 'poly',
+    name: 'Polynesian Village Resort',
+    tier: 'Deluxe',
+    price: '$650/night',
+    transportation: 'Monorail to Magic Kingdom',
+    amenities: ['Beach', 'Luau', 'Monorail Access', 'Dole Whips'],
+  },
+  {
+    id: 'cont',
+    name: 'Contemporary Resort',
+    tier: 'Deluxe',
+    price: '$600/night',
+    transportation: 'Walking to Magic Kingdom',
+    amenities: ['Walking Distance', "Chef Mickey's", 'Top of the World Lounge'],
+  },
+  {
+    id: 'akl',
+    name: 'Animal Kingdom Lodge',
+    tier: 'Deluxe',
+    price: '$500/night',
+    transportation: 'Bus to all parks',
+    amenities: ['Animal Views', 'African Cuisine', 'Cultural Activities'],
+  },
+  {
+    id: 'pofq',
+    name: 'Port Orleans French Quarter',
+    tier: 'Moderate',
+    price: '$300/night',
+    transportation: 'Boat to Disney Springs',
+    amenities: ['Boat Transport', 'Beignets', 'Pool', 'Compact Size'],
+  },
+  {
+    id: 'cb',
+    name: 'Caribbean Beach Resort',
+    tier: 'Moderate',
+    price: '$280/night',
+    transportation: 'Skyliner to EPCOT/Hollywood Studios',
+    amenities: ['Skyliner Access', 'Beach Pool', 'Pirate Ship Pool'],
+  },
+];
+
+const restaurants: Restaurant[] = [
+  {
+    id: 'bog',
+    name: 'Be Our Guest',
+    type: 'Table Service',
+    cuisine: 'French',
+    park: 'Magic Kingdom',
+    price: '$$$$',
+    rating: 4.5,
+  },
+  {
+    id: 'ohana',
+    name: 'Ohana',
+    type: 'Table Service',
+    cuisine: 'Polynesian',
+    park: 'Polynesian Resort',
+    price: '$$$',
+    rating: 4.7,
+  },
+  {
+    id: 'chef',
+    name: "Chef Mickey's",
+    type: 'Character Dining',
+    cuisine: 'American',
+    park: 'Contemporary Resort',
+    price: '$$$',
+    rating: 4.3,
+  },
+  {
+    id: 'space220',
+    name: 'Space 220',
+    type: 'Table Service',
+    cuisine: 'Contemporary',
+    park: 'EPCOT',
+    price: '$$$$',
+    rating: 4.6,
+  },
+  {
+    id: 'dole',
+    name: 'Dole Whip Stand',
+    type: 'Quick Service',
+    cuisine: 'Snacks',
+    park: 'Magic Kingdom',
+    price: '$',
+    rating: 4.8,
+  },
+  {
+    id: 'flame',
+    name: 'Flame Tree Barbecue',
+    type: 'Quick Service',
+    cuisine: 'BBQ',
+    park: 'Animal Kingdom',
+    price: '$$',
+    rating: 4.4,
+  },
+];
+
 const navigationItems: NavigationItem[] = [
   { id: 'overview', label: 'Trip Overview', icon: Home, color: 'blue' },
-  { id: 'party', label: 'Party Members', icon: Users, color: 'green' },
+  { id: 'party', label: 'Party Members', icon: Users, color: 'red' },
   { id: 'parks', label: 'Parks & Attractions', icon: MapPin, color: 'green' },
   { id: 'dining', label: 'Dining', icon: Utensils, color: 'orange' },
   { id: 'hotels', label: 'Hotels', icon: HotelIcon, color: 'purple' },
@@ -141,9 +260,11 @@ const NavLink: React.FC<NavLinkProps> = ({ icon: Icon, color, label, active, onC
 interface TripOverviewProps {
   trip: Trip;
   partyMembers: PartyMember[];
+  selectedParks: string[];
+  selectedHotel: string | null;
 }
 
-const TripOverview: React.FC<TripOverviewProps> = ({ trip, partyMembers }) => {
+const TripOverview: React.FC<TripOverviewProps> = ({ trip }) => {
   const daysUntilTrip = Math.ceil((trip.startDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
   const tripLength = Math.ceil((trip.endDate.getTime() - trip.startDate.getTime()) / (1000 * 60 * 60 * 24));
 
@@ -166,6 +287,7 @@ const TripOverview: React.FC<TripOverviewProps> = ({ trip, partyMembers }) => {
       icon: Ticket,
       color: 'purple',
     },
+
     {
       title: 'Reservations',
       value: '3 dining',
@@ -216,35 +338,6 @@ const TripOverview: React.FC<TripOverviewProps> = ({ trip, partyMembers }) => {
             </Stack>
           </Center>
         </Paper>
-
-        {/* Party Members */}
-        <div>
-          <Title order={3} mb="md">
-            Party Members
-          </Title>
-          <Grid>
-            {partyMembers.map((member) => (
-              <Grid.Col span={{ base: 12, sm: 6, md: 4 }} key={member.id}>
-                <Card shadow="sm" padding="lg" radius="md" withBorder>
-                  <Stack gap="xs">
-                    <Group>
-                      <Text fw={500}>{member.name}</Text>
-                      <Badge variant="light">{member.age} years old</Badge>
-                    </Group>
-                    <Text size="sm" c="dimmed">
-                      {member.ticketType}
-                    </Text>
-                    {member.dietaryRestrictions !== 'None' && (
-                      <Badge size="sm" color="orange">
-                        {member.dietaryRestrictions}
-                      </Badge>
-                    )}
-                  </Stack>
-                </Card>
-              </Grid.Col>
-            ))}
-          </Grid>
-        </div>
 
         {/* Parks Overview */}
         <div>
@@ -316,54 +409,41 @@ const TripOverview: React.FC<TripOverviewProps> = ({ trip, partyMembers }) => {
 
 // Main App Component
 const DisneyTripPlanner: React.FC = () => {
-  const [isOnboardingComplete, setIsOnboardingComplete] = useState<boolean>(false);
-  const [trip, setTrip] = useState<Trip | null>(null);
-  const [partyMembers, setPartyMembers] = useState<PartyMember[]>([]);
+  const [trip, setTrip] = useState<Trip>(sampleTrip);
   const [opened, { toggle, close }] = useDisclosure(false);
 
-  const handleOnboardingComplete = (newTrip: Trip, newPartyMembers: PartyMember[]) => {
-    setTrip(newTrip);
-    setPartyMembers(newPartyMembers);
-    setIsOnboardingComplete(true);
-  };
-
   const handleNavigationChange = (step: NavigationStep): void => {
-    if (trip) {
-      setTrip({ ...trip, currentStep: step });
-      close(); // Close mobile menu
-    }
-  };
-
-  const handlePartyMembersUpdate = (updatedMembers: PartyMember[]) => {
-    setPartyMembers(updatedMembers);
-    if (trip) {
-      setTrip({ ...trip, partySize: updatedMembers.length });
-    }
+    setTrip({ ...trip, currentStep: step });
+    close(); // Close mobile menu
   };
 
   const renderContent = (): React.ReactNode => {
-    if (!trip || !isOnboardingComplete) {
-      return null;
-    }
-
     switch (trip.currentStep) {
       case 'overview':
-        return <TripOverview trip={trip} partyMembers={partyMembers} />;
+        return <TripOverview trip={trip} />;
       case 'party':
-        return <PartyMembers partyMembers={partyMembers} onUpdatePartyMembers={handlePartyMembersUpdate} />;
+        return <PlaceholderSection title="Party" description="Setup who will be joining you for your trip" />;
       case 'parks':
-        return <Parks selectedDate={trip.startDate} />;
-      case 'dining':
-        return <Dining partySize={trip.partySize} />;
-      case 'hotels':
-        return <Hotels partySize={trip.partySize} tripDates={{ start: trip.startDate, end: trip.endDate }} />;
-      case 'lightning':
-        return <LightningLane partySize={trip.partySize} />;
-      case 'summary':
         return (
           <PlaceholderSection
-            title="Trip Summary"
-            description="Review all your reservations, plans, and important trip details"
+            title="Parks & Attractions"
+            description="Plan your daily park itineraries and track real-time wait times"
+          />
+        );
+      case 'dining':
+        return (
+          <PlaceholderSection
+            title="Dining Reservations"
+            description="Browse restaurants and manage your dining reservations"
+          />
+        );
+      case 'hotels':
+        return <PlaceholderSection title="Resort Hotels" description="Compare and book Disney resort accommodations" />;
+      case 'lightning':
+        return (
+          <PlaceholderSection
+            title="Lightning Lane Strategy"
+            description="Optimize your Lightning Lane selections for minimal wait times"
           />
         );
       case 'settings':
@@ -371,23 +451,10 @@ const DisneyTripPlanner: React.FC = () => {
           <PlaceholderSection title="Trip Settings" description="Manage your trip preferences and party details" />
         );
       default:
-        return <TripOverview trip={trip} partyMembers={partyMembers} />;
+        return <TripOverview trip={trip} />;
     }
   };
 
-  // Show onboarding if not completed
-  if (!isOnboardingComplete) {
-    {
-      console.log('Show onboarding as not complete');
-    }
-    return <Onboarding onComplete={handleOnboardingComplete} />;
-  }
-
-  {
-    console.log('Show main appshell');
-  }
-
-  // Show main app after onboarding
   return (
     <AppShell
       header={{ height: 70 }}
@@ -404,19 +471,19 @@ const DisneyTripPlanner: React.FC = () => {
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
             <div>
               <Text size="xl" fw={600}>
-                {trip?.name}
+                {trip.name}
               </Text>
               <Group gap="lg" visibleFrom="xs">
                 <Group gap="xs">
                   <Calendar size="1rem" />
                   <Text size="sm" c="dimmed">
-                    {trip?.startDate.toLocaleDateString()} - {trip?.endDate.toLocaleDateString()}
+                    {trip.startDate.toLocaleDateString()} - {trip.endDate.toLocaleDateString()}
                   </Text>
                 </Group>
                 <Group gap="xs">
                   <Users size="1rem" />
                   <Text size="sm" c="dimmed">
-                    {trip?.partySize} guests
+                    {trip.partySize} guests
                   </Text>
                 </Group>
               </Group>
@@ -426,7 +493,7 @@ const DisneyTripPlanner: React.FC = () => {
           <Group gap="xl" visibleFrom="md">
             <div style={{ textAlign: 'center' }}>
               <Text size="xl" fw={700} c="blue">
-                {trip ? Math.ceil((trip.startDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0}
+                {Math.ceil((trip.startDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))}
               </Text>
               <Text size="xs" c="dimmed">
                 days to go
@@ -434,7 +501,7 @@ const DisneyTripPlanner: React.FC = () => {
             </div>
             <div style={{ textAlign: 'center' }}>
               <Text size="xl" fw={700} c="green">
-                {trip ? Math.ceil((trip.endDate.getTime() - trip.startDate.getTime()) / (1000 * 60 * 60 * 24)) : 0}
+                {Math.ceil((trip.endDate.getTime() - trip.startDate.getTime()) / (1000 * 60 * 60 * 24))}
               </Text>
               <Text size="xs" c="dimmed">
                 days total
@@ -455,7 +522,7 @@ const DisneyTripPlanner: React.FC = () => {
             <NavLink
               key={item.id}
               {...item}
-              active={trip?.currentStep === item.id}
+              active={trip.currentStep === item.id}
               onClick={() => handleNavigationChange(item.id)}
             />
           ))}
