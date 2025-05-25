@@ -152,7 +152,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
             label="Start Date"
             placeholder="Select start date"
             value={data.startDate}
-            onChange={(date) => setData({ ...data, startDate: date })}
+            onChange={(date) => setData({ ...data, startDate: new Date(date) })}
             minDate={new Date()}
             required
           />
@@ -162,7 +162,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
             label="End Date"
             placeholder="Select end date"
             value={data.endDate}
-            onChange={(date) => setData({ ...data, endDate: date })}
+            onChange={(date) => setData({ ...data, endDate: new Date(date) })}
             minDate={data.startDate || new Date()}
             required
           />

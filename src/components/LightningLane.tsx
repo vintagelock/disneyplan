@@ -45,6 +45,7 @@ import {
   Crown,
   Heart,
   Shield,
+  Utensils,
 } from 'lucide-react';
 
 interface LightningLaneAttraction {

@@ -392,7 +392,7 @@ const Hotels: React.FC<HotelsProps> = ({ partySize = 4, tripDates }) => {
   };
 
   const getTransportationIcon = (method: string) => {
-    if (method.toLowerCase().includes('monorail')) return <Car size="1rem" />;
+    if (method.toLocaleLowerCase().includes('monorail')) return <Car size="1rem" />;
     if (method.toLowerCase().includes('boat')) return <Ship size="1rem" />;
     return <Bus size="1rem" />;
   };
@@ -450,8 +450,8 @@ const Hotels: React.FC<HotelsProps> = ({ partySize = 4, tripDates }) => {
           </Group>
 
           <Group gap="xs" mb="md">
-            {getTransportationIcon(hotel.transportation.primary)}
-            <Text size="sm">{hotel.transportation.primary}</Text>
+            {getTransportationIcon(hotel.transportation_extra.primary)}
+            <Text size="sm">{hotel.transportation_extra.primary}</Text>
           </Group>
 
           <Group mb="md">
@@ -854,7 +854,7 @@ const Hotels: React.FC<HotelsProps> = ({ partySize = 4, tripDates }) => {
                     Transportation
                   </Text>
                   <Stack gap="xs">
-                    {selectedHotel.transportation.destinations.slice(0, 3).map((dest, index) => (
+                    {selectedHotel.transportation_extra.destinations.slice(0, 3).map((dest, index) => (
                       <Group key={index} gap="xs">
                         {getTransportationIcon(dest.method)}
                         <Text size="sm">
