@@ -460,7 +460,7 @@ const DailyCalendar: React.FC<DailyScheduleProps> = ({ trip, partyMembers }) => 
         </Paper>
 
         {/* Calendar Grid */}
-        <SimpleGrid cols={7} spacing="md">
+        <SimpleGrid cols={4} spacing="xs">
           {weekDays.map((date) => {
             const daySchedule = getDaySchedule(date);
             const isInTrip = isDateInTrip(date);

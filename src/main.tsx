@@ -56,7 +56,7 @@ const myTheme = createTheme({
     ],
   },
 
-  primaryColor: 'purple',
+  primaryColor: 'blue',
   primaryShade: { dark: 9, light: 1 },
   defaultRadius: 'sm',
   fontFamily: 'Inter, system-ui, sans-serif',

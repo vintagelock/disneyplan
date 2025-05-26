@@ -67,7 +67,7 @@ const SettingsPage: React.FC<SettingsProps> = ({ trip, partyMembers, onUpdateTri
     displayName: 'Lewis Family',
     email: 'lewis.family@email.com',
     phone: '+1 (555) 123-4567',
-    emergencyContact: 'Jane Lewis - (555) 987-6543',
+    emergencyContact: 'Amy Lewis - (555) 987-6543',
 
     // Notification Settings
     pushNotifications: true,
@@ -88,7 +88,7 @@ const SettingsPage: React.FC<SettingsProps> = ({ trip, partyMembers, onUpdateTri
     timezone: 'America/New_York',
     currency: 'USD',
     dateFormat: 'MM/dd/yyyy',
-    timeFormat: '12h',
+    timeFormat: '24h',
 
     // Planning Preferences
     planningStyle: 'detailed',

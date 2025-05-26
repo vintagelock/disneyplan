@@ -102,7 +102,7 @@ const navigationItems: NavigationItem[] = [
   { id: 'overview', label: 'Trip Overview', icon: Home, color: 'blue' },
   { id: 'calendar', label: 'Daily Calendar', icon: CalendarDays, color: 'violet' },
   { id: 'party', label: 'Party Members', icon: Users, color: 'green' },
-  { id: 'parks', label: 'Parks & Attractions', icon: MapPin, color: 'green' },
+  { id: 'parks', label: 'Parks & Attractions', icon: MapPin, color: 'brown' },
   { id: 'dining', label: 'Dining', icon: Utensils, color: 'orange' },
   { id: 'hotels', label: 'Hotels', icon: HotelIcon, color: 'purple' },
   { id: 'lightning', label: 'Lightning Lane', icon: Zap, color: 'yellow' },
@@ -144,8 +144,8 @@ const NavLink: React.FC<NavLinkProps> = ({ icon: Icon, color, label, active, onC
       }}
     >
       <Group>
-        <ThemeIcon color={color} variant="light">
-          <Icon size="1rem" />
+        <ThemeIcon color={color} variant="light" size={32} radius="sm">
+          <Icon size="24px" />
         </ThemeIcon>
         <Text size="sm">{label}</Text>
       </Group>

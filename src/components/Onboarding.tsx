@@ -54,8 +54,8 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
     endDate: null,
     partyMembers: [
       {
-        name: '',
-        age: 0,
+        name: 'Ben',
+        age: 51,
         ticketType: 'Base Ticket',
         dietaryRestrictions: 'None',
         disabilities: false,
