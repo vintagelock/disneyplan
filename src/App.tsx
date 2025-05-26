@@ -48,7 +48,9 @@ import Hotels from './components/Hotels';
 import LightningLane from './components/LightningLane';
 import PartyMembers from './components/PartyMembers';
 import DailyCalendar from './components/DailyCalendar';
+import SettingsPage from './components/SettingsPage';
 import AuthComponent from './components/AuthComponent';
+import TripSummary from './components/TripSummary';
 
 // Supabase imports
 import { useAuth } from './lib/hooks/useAuth';
@@ -376,16 +378,9 @@ const DisneyTripPlanner: React.FC = () => {
       case 'lightning':
         return <LightningLane partySize={trip.partySize} />;
       case 'summary':
-        return (
-          <PlaceholderSection
-            title="Trip Summary"
-            description="Review all your reservations, plans, and important trip details"
-          />
-        );
+        return <TripSummary trip={trip} partyMembers={partyMembers} />;
       case 'settings':
-        return (
-          <PlaceholderSection title="Trip Settings" description="Manage your trip preferences and party details" />
-        );
+        return <SettingsPage trip={trip} partyMembers={partyMembers} onUpdateTrip={setTrip} />;
       default:
         return <TripOverview trip={trip} partyMembers={partyMembers} />;
     }
