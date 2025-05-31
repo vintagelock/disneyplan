@@ -39,7 +39,6 @@ import {
 // Types
 import type { Trip, Park, Hotel, Restaurant, NavigationItem, PartyMember, NavigationStep } from './types/types';
 
-import "./lib/api/themepark_wiki"
 
 // Components
 import { PlaceholderSection } from './components/PlaceHolder';
