@@ -71,7 +71,7 @@ createRoot(document.getElementById('root')!).render(
       <MantineProvider theme={mergedTheme} defaultColorScheme="dark">
         <DatesProvider settings={DATES_PROVIDER_DEFAULT_SETTINGS}>
           <Notifications />
-          <ThemeParkComponent />
+          <DisneyTripPlanner />
         </DatesProvider>
       </MantineProvider>
     </ErrorBoundary>
