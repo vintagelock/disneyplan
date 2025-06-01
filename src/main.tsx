@@ -12,6 +12,7 @@ import DisneyTripPlanner from './App.tsx';
 import { SupabaseDisneyTripPlanner } from './App.tsx';
 
 import ErrorBoundary from './components/ErrorBoundary.tsx';
+import DisneyWaitTimesTest from './components/times.tsx';
 
 const myTheme = createTheme({
   colors: {
@@ -70,7 +71,7 @@ createRoot(document.getElementById('root')!).render(
       <MantineProvider theme={mergedTheme} defaultColorScheme="dark">
         <DatesProvider settings={DATES_PROVIDER_DEFAULT_SETTINGS}>
           <Notifications />
-          <DisneyTripPlanner />
+          <DisneyWaitTimesTest />
         </DatesProvider>
       </MantineProvider>
     </ErrorBoundary>
