@@ -39,6 +39,7 @@ import {
 // Types
 import type { Trip, Park, Hotel, Restaurant, NavigationItem, PartyMember, NavigationStep } from './types/types';
 
+
 // Components
 import { PlaceholderSection } from './components/PlaceHolder';
 import Onboarding from './components/Onboarding';

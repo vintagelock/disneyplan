@@ -13,6 +13,7 @@ import { SupabaseDisneyTripPlanner } from './App.tsx';
 
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 import DisneyWaitTimesTest from './components/times.tsx';
+import ThemeParkComponent from './components/ThemeparkComponentTest.tsx';
 
 const myTheme = createTheme({
   colors: {

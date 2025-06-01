@@ -1,0 +1,42 @@
+https://api.themeparks.wiki/v1/entity/f020b5e3-d26d-4339-83f9-0f1f858a0e40/live
+
+{
+  "id": "f020b5e3-d26d-4339-83f9-0f1f858a0e40",
+  "name": "Oga's Cantina at the Walt Disney World Resort",
+  "entityType": "RESTAURANT",
+  "timezone": "America/New_York",
+  "liveData": [
+    {
+      "id": "f020b5e3-d26d-4339-83f9-0f1f858a0e40",
+      "name": "Oga's Cantina at the Walt Disney World Resort",
+      "entityType": "RESTAURANT",
+      "parkId": "288747d1-8b4f-4a64-867e-ea7c9b27bad8",
+      "externalId": "19267226;entityType=restaurant",
+      "queue": {
+        "STANDBY": {
+          "waitTime": 60
+        }
+      },
+      "status": "OPERATING",
+      "diningAvailability": [
+        {
+          "waitTime": 60,
+          "partySize": 1
+        },
+        {
+          "waitTime": 60,
+          "partySize": 2
+        },
+        {
+          "waitTime": 60,
+          "partySize": 4
+        },
+        {
+          "waitTime": 60,
+          "partySize": 5
+        }
+      ],
+      "lastUpdated": "2025-05-29T22:48:08Z"
+    }
+  ]
+}
